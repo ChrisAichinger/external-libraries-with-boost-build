@@ -1,0 +1,19 @@
+path-constant LIBSQUARE_DIR : . ;
+
+make libsquare.a
+      # Wildcard dependency to rebuild on libsquare on code changes.
+      # Exclude generated sources to avoid triggering constant rebuilds.
+    : [ glob-tree *.c *.cpp *.h : generated-file.c gen-*.cpp ]
+    : @build-libsquare ;
+actions build-libsquare
+{
+    ( cd $(LIBSQUARE_DIR) && make )
+    cp $(LIBSQUARE_DIR)/libsquare.a $(<)
+}
+
+alias libsquare
+    : libsquare.a                                        # sources
+    :                                                    # requirements
+    :                                                    # default-build
+    : <dependency>libsquare.a <include>$(LIBSQUARE_DIR)  # usage-requirements
+    ;

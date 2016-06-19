@@ -1,0 +1,1 @@
+exe application : application.c libsquare//libsquare ;
